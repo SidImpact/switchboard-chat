@@ -361,7 +361,7 @@ export default function Home() {
                 <span className="status-name">ChatGPT Pro</span>
               </div>
               <span className={`status-badge gpt ${activeModel === "chatgpt" ? "active" : ""}`}>
-                {activeModel === "chatgpt" ? "ACTIVE" : "STANDBY"}
+                {activeModel === "chatgpt" ? "ACTIVE" : "READ ONLY"}
               </span>
             </div>
             <div className={`sidebar-status-item ${activeModel === "gemini" ? "active" : ""}`}>
@@ -370,7 +370,7 @@ export default function Home() {
                 <span className="status-name">Gemini Pro</span>
               </div>
               <span className={`status-badge gemini ${activeModel === "gemini" ? "active" : ""}`}>
-                {activeModel === "gemini" ? "ACTIVE" : "STANDBY"}
+                {activeModel === "gemini" ? "ACTIVE" : "READ ONLY"}
               </span>
             </div>
             <div className={`sidebar-status-item ${activeModel === "claude" ? "active" : ""}`}>
@@ -379,7 +379,7 @@ export default function Home() {
                 <span className="status-name">Claude 3.5</span>
               </div>
               <span className={`status-badge claude ${activeModel === "claude" ? "active" : ""}`}>
-                {activeModel === "claude" ? "ACTIVE" : "STANDBY"}
+                {activeModel === "claude" ? "ACTIVE" : "READ ONLY"}
               </span>
             </div>
           </div>
