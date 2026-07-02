@@ -713,6 +713,11 @@ html, body {
   filter: brightness(1.1);
 }
 
+/* Sidebar Bots Status Dashboard (Desktop: Hidden) */
+.sidebar-status-dashboard {
+  display: none;
+}
+
 @media (max-width: 768px) {
   /* Layout modifications */
   .app-container {
@@ -827,5 +832,90 @@ html, body {
     backdrop-filter: blur(2px);
     z-index: 150;
     animation: fadeIn 0.2s ease-out;
+  }
+
+  /* BOTS DASHBOARD in Sidebar (Mobile: Visible) */
+  .sidebar-status-dashboard {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 8px;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .sidebar-status-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .sidebar-status-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    font-size: 13px;
+  }
+
+  .sidebar-status-item.active {
+    background-color: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .status-item-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--text-muted);
+  }
+
+  .status-dot.gpt.active {
+    background-color: #10B981;
+    box-shadow: 0 0 6px #10B981;
+  }
+
+  .status-dot.gemini.active {
+    background-color: #3B82F6;
+    box-shadow: 0 0 6px #3B82F6;
+  }
+
+  .status-dot.claude.active {
+    background-color: #F97316;
+    box-shadow: 0 0 6px #F97316;
+  }
+
+  .status-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-muted);
+  }
+
+  .status-badge.active.gpt {
+    background-color: rgba(16, 185, 129, 0.15);
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .status-badge.active.gemini {
+    background-color: rgba(59, 130, 246, 0.15);
+    color: #3B82F6;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+  }
+
+  .status-badge.active.claude {
+    background-color: rgba(249, 115, 22, 0.15);
+    color: #F97316;
+    border: 1px solid rgba(249, 115, 22, 0.3);
   }
 }

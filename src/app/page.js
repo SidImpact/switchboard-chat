@@ -349,6 +349,42 @@ export default function Home() {
           ))}
         </div>
 
+        {/* BOTS DASHBOARD (Only visible on mobile via CSS) */}
+        <div className="sidebar-status-dashboard">
+          <div style={{ fontSize: "11px", fontWeight: "700", color: "var(--text-muted)", letterSpacing: "0.5px", textTransform: "uppercase", paddingBottom: "10px", paddingLeft: "8px" }}>
+            Bots Dashboard
+          </div>
+          <div className="sidebar-status-list">
+            <div className={`sidebar-status-item ${activeModel === "chatgpt" ? "active" : ""}`}>
+              <div className="status-item-left">
+                <span className={`status-dot gpt ${activeModel === "chatgpt" ? "active" : ""}`}></span>
+                <span className="status-name">ChatGPT Pro</span>
+              </div>
+              <span className={`status-badge gpt ${activeModel === "chatgpt" ? "active" : ""}`}>
+                {activeModel === "chatgpt" ? "ACTIVE" : "STANDBY"}
+              </span>
+            </div>
+            <div className={`sidebar-status-item ${activeModel === "gemini" ? "active" : ""}`}>
+              <div className="status-item-left">
+                <span className={`status-dot gemini ${activeModel === "gemini" ? "active" : ""}`}></span>
+                <span className="status-name">Gemini Pro</span>
+              </div>
+              <span className={`status-badge gemini ${activeModel === "gemini" ? "active" : ""}`}>
+                {activeModel === "gemini" ? "ACTIVE" : "STANDBY"}
+              </span>
+            </div>
+            <div className={`sidebar-status-item ${activeModel === "claude" ? "active" : ""}`}>
+              <div className="status-item-left">
+                <span className={`status-dot claude ${activeModel === "claude" ? "active" : ""}`}></span>
+                <span className="status-name">Claude 3.5</span>
+              </div>
+              <span className={`status-badge claude ${activeModel === "claude" ? "active" : ""}`}>
+                {activeModel === "claude" ? "ACTIVE" : "STANDBY"}
+              </span>
+            </div>
+          </div>
+        </div>
+
         <div className="sidebar-footer">
           <button className="footer-btn transition-all" onClick={() => setIsSettingsOpen(true)}>
             <IconSettings />
