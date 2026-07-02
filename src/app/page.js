@@ -175,7 +175,7 @@ export default function Home() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messageLogs, activeSessionId]);
 
-  // Load API Keys from localStorage on mount
+  // Load API Keys from localStorage on mount & close sidebar on mobile
   useEffect(() => {
     if (typeof window !== "undefined") {
       const savedKeys = localStorage.getItem("switchboard_api_keys");
@@ -185,6 +185,11 @@ export default function Home() {
         } catch (e) {
           console.error("Error loading keys", e);
         }
+      }
+      
+      // Default sidebar to closed on mobile viewports
+      if (window.innerWidth < 768) {
+        setSidebarOpen(false);
       }
     }
   }, []);
@@ -519,6 +524,14 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* MOBILE SIDEBAR OVERLAY BACKDROP */}
+      {sidebarOpen && (
+        <div 
+          className="sidebar-backdrop" 
+          onClick={() => setSidebarOpen(false)} 
+        />
+      )}
 
       {/* SETTINGS MODAL */}
       {isSettingsOpen && (
