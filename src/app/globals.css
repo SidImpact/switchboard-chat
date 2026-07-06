@@ -244,6 +244,47 @@ html, body {
   background-color: rgba(239, 68, 68, 0.1);
 }
 
+.rename-session-btn {
+  background: transparent;
+  border: 0;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s, background-color 0.2s;
+}
+
+.session-item:hover .rename-session-btn {
+  opacity: 1;
+}
+
+.rename-session-btn:hover {
+  color: var(--accent-color);
+  background-color: rgba(99, 102, 241, 0.1);
+}
+
+.rename-input {
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 4px 8px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: inherit;
+  outline: 0;
+  width: 100%;
+  margin-right: 8px;
+  transition: border-color 0.2s;
+}
+
+.rename-input:focus {
+  border-color: var(--accent-color);
+}
+
 .sidebar-footer {
   padding: 16px;
   border-top: 1px solid var(--border-color);
@@ -943,6 +984,10 @@ html, body {
   }
 
   .delete-session-btn {
+    opacity: 1 !important;
+  }
+
+  .rename-session-btn {
     opacity: 1 !important;
   }
 }

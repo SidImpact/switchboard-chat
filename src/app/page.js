@@ -88,6 +88,13 @@ const IconTrash = () => (
   </svg>
 );
 
+const IconEdit = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+    <path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path>
+  </svg>
+);
+
 // Mock chat messages library for rich, realistic switching responses
 const MOCK_ANSWERS = {
   chatgpt: [
@@ -125,6 +132,8 @@ export default function Home() {
   const [activeSessionId, setActiveSessionId] = useState(null);
   const [messageLogs, setMessageLogs] = useState({});
   const [isHydrated, setIsHydrated] = useState(false);
+  const [editingSessionId, setEditingSessionId] = useState(null);
+  const [editTitle, setEditTitle] = useState("");
 
   const messagesEndRef = useRef(null);
 
@@ -398,6 +407,21 @@ export default function Home() {
     }
   };
 
+  const handleSaveRename = (sessionId) => {
+    if (!editTitle.trim()) {
+      setEditingSessionId(null);
+      return;
+    }
+    const updatedSessions = sessions.map(s => {
+      if (s.id === sessionId) {
+        return { ...s, title: editTitle.trim() };
+      }
+      return s;
+    });
+    setSessions(updatedSessions);
+    setEditingSessionId(null);
+  };
+
   // Helper to determine text for Active/Standby states
   const getBotStateText = (botName) => {
     if (activeModel === botName) {
@@ -449,18 +473,50 @@ export default function Home() {
               onClick={() => setActiveSessionId(session.id)}
               style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "10px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>
-                <IconChat />
-                {session.title}
-              </div>
-              <button
-                type="button"
-                className="delete-session-btn transition-all"
-                onClick={(e) => handleDeleteSession(session.id, e)}
-                title="Delete Session"
-              >
-                <IconTrash />
-              </button>
+              {editingSessionId === session.id ? (
+                <input
+                  type="text"
+                  className="rename-input"
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  onBlur={() => handleSaveRename(session.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSaveRename(session.id);
+                    if (e.key === "Escape") setEditingSessionId(null);
+                  }}
+                  autoFocus
+                  onClick={(e) => e.stopPropagation()}
+                />
+              ) : (
+                <>
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>
+                    <IconChat />
+                    {session.title}
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                    <button
+                      type="button"
+                      className="rename-session-btn transition-all"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditingSessionId(session.id);
+                        setEditTitle(session.title);
+                      }}
+                      title="Rename Session"
+                    >
+                      <IconEdit />
+                    </button>
+                    <button
+                      type="button"
+                      className="delete-session-btn transition-all"
+                      onClick={(e) => handleDeleteSession(session.id, e)}
+                      title="Delete Session"
+                    >
+                      <IconTrash />
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           ))}
         </div>
