@@ -221,6 +221,29 @@ html, body {
   background-color: rgba(99, 102, 241, 0.05);
 }
 
+.delete-session-btn {
+  background: transparent;
+  border: 0;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s, background-color 0.2s;
+}
+
+.session-item:hover .delete-session-btn {
+  opacity: 1;
+}
+
+.delete-session-btn:hover {
+  color: #EF4444;
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
 .sidebar-footer {
   padding: 16px;
   border-top: 1px solid var(--border-color);
@@ -917,5 +940,9 @@ html, body {
     background-color: rgba(249, 115, 22, 0.15);
     color: #F97316;
     border: 1px solid rgba(249, 115, 22, 0.3);
+  }
+
+  .delete-session-btn {
+    opacity: 1 !important;
   }
 }

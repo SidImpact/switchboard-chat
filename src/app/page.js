@@ -79,6 +79,15 @@ const IconChat = () => (
   </svg>
 );
 
+const IconTrash = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="3 6 5 6 21 6"></polyline>
+    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+    <line x1="10" y1="11" x2="10" y2="17"></line>
+    <line x1="14" y1="11" x2="14" y2="17"></line>
+  </svg>
+);
+
 // Mock chat messages library for rich, realistic switching responses
 const MOCK_ANSWERS = {
   chatgpt: [
@@ -111,62 +120,11 @@ export default function Home() {
     gemini: ""
   });
 
-  // Chat sessions state
-  const [sessions, setSessions] = useState([
-    { id: "session-1", title: "Python Web Scraper Build" },
-    { id: "session-2", title: "Refactoring React Styles" }
-  ]);
-  const [activeSessionId, setActiveSessionId] = useState("session-1");
-
-  // Message Logs mapped by Session ID
-  const [messageLogs, setMessageLogs] = useState({
-    "session-1": [
-      {
-        id: "msg-1",
-        sender: "user",
-        text: "Let's build a quick python web scraper using BeautifulSoup.",
-        timestamp: "10:30 PM",
-        model: "claude"
-      },
-      {
-        id: "msg-2",
-        sender: "assistant",
-        text: "Here is the basic python script using BeautifulSoup to fetch and parse html:\n\n```python\nimport requests\nfrom bs4 import BeautifulSoup\n\ndef fetch_titles(url):\n    response = requests.get(url)\n    soup = BeautifulSoup(response.text, 'html.parser')\n    return [title.text for title in soup.find_all('h2')]\n```\nThis gives us a clean list of headline elements.",
-        timestamp: "10:31 PM",
-        model: "claude"
-      },
-      {
-        id: "msg-3",
-        sender: "user",
-        text: "Now, I need to check if there are standard scraper blocking rules on target.com. Switch to Gemini to check.",
-        timestamp: "10:32 PM",
-        model: "gemini"
-      },
-      {
-        id: "msg-4",
-        sender: "assistant",
-        text: "🔍 **Web Search Results for: target.com scraper blocking**\n\nBased on current web records, target.com implements Cloudflare Web Application Firewall (WAF) which aggressively blocks raw `requests` sessions lacking valid User-Agent strings, Cookies, or TLS fingerprints.\n\n**Recommendation:**\n1. Use `cloudscraper` in python.\n2. Emulate Chrome TLS fingerprints.\n3. Add random delays between requests.",
-        timestamp: "10:33 PM",
-        model: "gemini"
-      }
-    ],
-    "session-2": [
-      {
-        id: "msg-5",
-        sender: "user",
-        text: "How do I align text vertically in a CSS flexbox?",
-        timestamp: "Yesterday",
-        model: "chatgpt"
-      },
-      {
-        id: "msg-6",
-        sender: "assistant",
-        text: "You can align items vertically in flexbox using `align-items: center` on the container, provided that the main axis is horizontal (`flex-direction: row`). If the main axis is vertical (`flex-direction: column`), use `justify-content: center`.",
-        timestamp: "Yesterday",
-        model: "chatgpt"
-      }
-    ]
-  });
+  // Chat sessions state (initialized empty to prevent hydration mismatch)
+  const [sessions, setSessions] = useState([]);
+  const [activeSessionId, setActiveSessionId] = useState(null);
+  const [messageLogs, setMessageLogs] = useState({});
+  const [isHydrated, setIsHydrated] = useState(false);
 
   const messagesEndRef = useRef(null);
 
@@ -175,9 +133,10 @@ export default function Home() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messageLogs, activeSessionId]);
 
-  // Load API Keys from localStorage on mount & close sidebar on mobile
+  // Load API Keys, Sessions, and Message Logs from localStorage on mount & close sidebar on mobile
   useEffect(() => {
     if (typeof window !== "undefined") {
+      // 1. Load API Keys
       const savedKeys = localStorage.getItem("switchboard_api_keys");
       if (savedKeys) {
         try {
@@ -187,12 +146,131 @@ export default function Home() {
         }
       }
       
+      // 2. Load Chat Sessions
+      const savedSessions = localStorage.getItem("switchboard_sessions");
+      const savedActiveSessionId = localStorage.getItem("switchboard_active_session_id");
+      const savedMessageLogs = localStorage.getItem("switchboard_message_logs");
+
+      let loadedSessions = [];
+      let loadedActiveSessionId = null;
+      let loadedMessageLogs = {};
+
+      if (savedSessions) {
+        try {
+          loadedSessions = JSON.parse(savedSessions);
+        } catch (e) {
+          console.error("Error parsing sessions", e);
+        }
+      }
+
+      if (savedActiveSessionId) {
+        loadedActiveSessionId = savedActiveSessionId;
+      }
+
+      if (savedMessageLogs) {
+        try {
+          loadedMessageLogs = JSON.parse(savedMessageLogs);
+        } catch (e) {
+          console.error("Error parsing message logs", e);
+        }
+      }
+
+      // If no sessions exist in storage, create default initial sessions with mock history
+      if (loadedSessions.length === 0) {
+        const defaultSessionId = "session-1";
+        const secondarySessionId = "session-2";
+        
+        loadedSessions = [
+          { id: defaultSessionId, title: "Python Web Scraper Build" },
+          { id: secondarySessionId, title: "Refactoring React Styles" }
+        ];
+        loadedActiveSessionId = defaultSessionId;
+        
+        loadedMessageLogs = {
+          [defaultSessionId]: [
+            {
+              id: "msg-1",
+              sender: "user",
+              text: "Let's build a quick python web scraper using BeautifulSoup.",
+              timestamp: "10:30 PM",
+              model: "claude"
+            },
+            {
+              id: "msg-2",
+              sender: "assistant",
+              text: "Here is the basic python script using BeautifulSoup to fetch and parse html:\n\n```python\nimport requests\nfrom bs4 import BeautifulSoup\n\ndef fetch_titles(url):\n    response = requests.get(url)\n    soup = BeautifulSoup(response.text, 'html.parser')\n    return [title.text for title in soup.find_all('h2')]\n```\nThis gives us a clean list of headline elements.",
+              timestamp: "10:31 PM",
+              model: "claude"
+            },
+            {
+              id: "msg-3",
+              sender: "user",
+              text: "Now, I need to check if there are standard scraper blocking rules on target.com. Switch to Gemini to check.",
+              timestamp: "10:32 PM",
+              model: "gemini"
+            },
+            {
+              id: "msg-4",
+              sender: "assistant",
+              text: "🔍 **Web Search Results for: target.com scraper blocking**\n\nBased on current web records, target.com implements Cloudflare Web Application Firewall (WAF) which aggressively blocks raw `requests` sessions lacking valid User-Agent strings, Cookies, or TLS fingerprints.\n\n**Recommendation:**\n1. Use `cloudscraper` in python.\n2. Emulate Chrome TLS fingerprints.\n3. Add random delays between requests.",
+              timestamp: "10:33 PM",
+              model: "gemini"
+            }
+          ],
+          [secondarySessionId]: [
+            {
+              id: "msg-5",
+              sender: "user",
+              text: "How do I align text vertically in a CSS flexbox?",
+              timestamp: "Yesterday",
+              model: "chatgpt"
+            },
+            {
+              id: "msg-6",
+              sender: "assistant",
+              text: "You can align items vertically in flexbox using `align-items: center` on the container, provided that the main axis is horizontal (`flex-direction: row`). If the main axis is vertical (`flex-direction: column`), use `justify-content: center`.",
+              timestamp: "Yesterday",
+              model: "chatgpt"
+            }
+          ]
+        };
+
+        // Write defaults to localStorage
+        localStorage.setItem("switchboard_sessions", JSON.stringify(loadedSessions));
+        localStorage.setItem("switchboard_active_session_id", loadedActiveSessionId);
+        localStorage.setItem("switchboard_message_logs", JSON.stringify(loadedMessageLogs));
+      }
+
+      setSessions(loadedSessions);
+      setActiveSessionId(loadedActiveSessionId);
+      setMessageLogs(loadedMessageLogs);
+      setIsHydrated(true);
+
       // Default sidebar to closed on mobile viewports
       if (window.innerWidth < 768) {
         setSidebarOpen(false);
       }
     }
   }, []);
+
+  // Sync state changes to localStorage
+  useEffect(() => {
+    if (isHydrated) {
+      localStorage.setItem("switchboard_sessions", JSON.stringify(sessions));
+    }
+  }, [sessions, isHydrated]);
+
+  useEffect(() => {
+    if (isHydrated && activeSessionId) {
+      localStorage.setItem("switchboard_active_session_id", activeSessionId);
+    }
+  }, [activeSessionId, isHydrated]);
+
+  useEffect(() => {
+    if (isHydrated) {
+      localStorage.setItem("switchboard_message_logs", JSON.stringify(messageLogs));
+    }
+  }, [messageLogs, isHydrated]);
 
   const handleSaveKeys = (newKeys) => {
     setApiKeys(newKeys);
@@ -291,6 +369,35 @@ export default function Home() {
     setActiveSessionId(newSessionId);
   };
 
+  const handleDeleteSession = (sessionIdToDelete, e) => {
+    if (e) e.stopPropagation(); // Prevent selecting session when clicking delete
+    
+    const updatedSessions = sessions.filter(s => s.id !== sessionIdToDelete);
+    setSessions(updatedSessions);
+
+    const updatedMessageLogs = { ...messageLogs };
+    delete updatedMessageLogs[sessionIdToDelete];
+    setMessageLogs(updatedMessageLogs);
+
+    // If we deleted the active session, switch activeSessionId
+    if (activeSessionId === sessionIdToDelete) {
+      if (updatedSessions.length > 0) {
+        setActiveSessionId(updatedSessions[0].id);
+      } else {
+        const newSessionId = `session-${Date.now()}`;
+        const newSession = {
+          id: newSessionId,
+          title: "New Session 1"
+        };
+        setSessions([newSession]);
+        setMessageLogs({
+          [newSessionId]: []
+        });
+        setActiveSessionId(newSessionId);
+      }
+    }
+  };
+
   // Helper to determine text for Active/Standby states
   const getBotStateText = (botName) => {
     if (activeModel === botName) {
@@ -340,11 +447,20 @@ export default function Home() {
               key={session.id}
               className={`session-item transition-all ${activeSessionId === session.id ? "active" : ""}`}
               onClick={() => setActiveSessionId(session.id)}
+              style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "10px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>
                 <IconChat />
                 {session.title}
               </div>
+              <button
+                type="button"
+                className="delete-session-btn transition-all"
+                onClick={(e) => handleDeleteSession(session.id, e)}
+                title="Delete Session"
+              >
+                <IconTrash />
+              </button>
             </div>
           ))}
         </div>
