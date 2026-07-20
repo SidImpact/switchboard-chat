@@ -12,8 +12,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Switchboard Chat - Multi-LLM Switcher",
-  description: "Chat with ChatGPT, Claude, and Gemini in a single unified thread with background sync.",
+  title: "Alt-Chat - One conversation. Every AI.",
+  description: "One conversation. Every AI. Chat with ChatGPT, Claude, and Gemini in a single unified thread with background sync.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/logo.png", type: "image/png" }
+    ],
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({ children }) {

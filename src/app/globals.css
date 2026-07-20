@@ -667,6 +667,7 @@ html, body {
   border-radius: 16px;
   width: 100%;
   max-width: 460px;
+  max-height: 90vh;
   padding: 24px;
   display: flex;
   flex-direction: column;
@@ -706,6 +707,8 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 
 .form-group {
@@ -991,3 +994,472 @@ html, body {
     opacity: 1 !important;
   }
 }
+
+/* ABOUT & SUPPORT MODAL STYLES */
+.modal-container.large {
+  max-width: 540px;
+}
+
+.modal-tabs-header {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 12px;
+  gap: 8px;
+}
+
+.modal-tab-btn {
+  flex: 1;
+  padding: 12px 8px;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.modal-tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.modal-tab-btn.active {
+  color: var(--accent-color);
+  border-bottom-color: var(--accent-color);
+}
+
+/* About Tab styling */
+.about-brand-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 16px 0;
+  gap: 10px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 16px;
+}
+
+.about-logo-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--accent-color), #4f46e5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+  color: #fff;
+}
+
+.about-app-title {
+  font-size: 20px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #a5b4fc, #818cf8, #6366f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.about-app-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  max-width: 420px;
+}
+
+.about-features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.about-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.about-feature-bullet {
+  color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.about-footer-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.developer-signature {
+  font-weight: 700;
+  color: var(--accent-color);
+  background: rgba(99, 102, 241, 0.1);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+}
+
+/* Donation Tab styling */
+.donation-intro {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.donation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 500px) {
+  .donation-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.donation-card {
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.donation-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background-color: var(--text-muted);
+  opacity: 0.8;
+}
+
+.donation-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Platform specific borders and hover glows */
+.donation-card.gpay::before { background: linear-gradient(180deg, #4285F4, #EA4335, #FBBC05, #34A853); }
+.donation-card.paypal::before { background-color: #00457C; }
+.donation-card.paypal:hover { box-shadow: 0 0 10px rgba(0, 69, 124, 0.15); }
+
+.donation-card.kofi::before { background-color: #FF5E5B; }
+.donation-card.kofi:hover { box-shadow: 0 0 10px rgba(255, 94, 91, 0.15); }
+
+.donation-card.patreon::before { background-color: #FF424D; }
+.donation-card.patreon:hover { box-shadow: 0 0 10px rgba(255, 66, 77, 0.15); }
+
+.donation-card.razorpay::before { background-color: #0B44CD; }
+.donation-card.razorpay:hover { box-shadow: 0 0 10px rgba(11, 68, 205, 0.15); }
+
+.donation-card.chai4me::before { background-color: #FF813F; }
+.donation-card.chai4me:hover { box-shadow: 0 0 10px rgba(255, 129, 63, 0.15); }
+
+.donation-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.donation-platform-name {
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-primary);
+}
+
+.donation-platform-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.donation-card-action {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.donation-upi-box {
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px dashed var(--border-color);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.donation-copy-btn {
+  background: transparent;
+  border: 0;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.donation-copy-btn:hover {
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.donation-copy-btn.copied {
+  color: #10B981;
+}
+
+.gpay-badge-icon {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+  background: linear-gradient(135deg, #4285F4, #34A853);
+}
+
+/* Toast/Copied message popup */
+.copy-toast {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background-color: #10B981;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* AI CHATBOTS COMPARISON & PROS/CONS */
+.compare-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  width: 100%;
+  max-width: 900px;
+  margin-top: 10px;
+}
+
+@media (max-width: 900px) {
+  .compare-container {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.compare-card {
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.compare-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--text-muted);
+}
+
+.compare-card.chatgpt::before {
+  background: var(--chatgpt-color);
+}
+.compare-card.chatgpt:hover {
+  border-color: var(--chatgpt-color);
+  box-shadow: 0 4px 20px var(--chatgpt-glow);
+}
+
+.compare-card.gemini::before {
+  background: var(--gemini-color);
+}
+.compare-card.gemini:hover {
+  border-color: var(--gemini-color);
+  box-shadow: 0 4px 20px var(--gemini-glow);
+}
+
+.compare-card.claude::before {
+  background: var(--claude-color);
+}
+.compare-card.claude:hover {
+  border-color: var(--claude-color);
+  box-shadow: 0 4px 20px var(--claude-glow);
+}
+
+.compare-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.compare-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.compare-card-subtitle {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-top: -2px;
+}
+
+.compare-list-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.compare-list-title.pros {
+  color: #10B981;
+}
+
+.compare-list-title.cons {
+  color: #F59E0B;
+}
+
+.compare-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  list-style: none;
+}
+
+.compare-list-item {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.compare-list-item span {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.compare-select-btn {
+  margin-top: auto;
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.compare-select-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--border-color-hover);
+}
+
+.compare-select-btn.active.chatgpt {
+  background: var(--chatgpt-bg);
+  border-color: var(--chatgpt-color);
+  color: var(--chatgpt-color);
+}
+
+.compare-select-btn.active.gemini {
+  background: var(--gemini-bg);
+  border-color: var(--gemini-color);
+  color: var(--gemini-color);
+}
+
+.compare-select-btn.active.claude {
+  background: var(--claude-bg);
+  border-color: var(--claude-color);
+  color: var(--claude-color);
+}
+
+/* Modal Comparison overrides */
+.modal-container.large.comparison-mode {
+  max-width: 800px !important;
+}
+
+.modal-comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .modal-comparison-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
